@@ -1,0 +1,29 @@
+<div class="income-detail-bg">
+  <div class="income-detail-header">
+    <h2><i class="fas fa-money-bill-wave"></i> Gelirler Detay</h2>
+    <p>Son ayın gelir özetleri ve analizleri</p>
+  </div>
+  <div class="income-detail-cards">
+    <div class="summary-card total">
+      <div class="summary-label">Toplam Gelir</div>
+      <div class="summary-value">₺{{ total | number:'1.0-0' }}</div>
+    </div>
+    <div class="summary-card max">
+      <div class="summary-label">En Fazla Gelir</div>
+      <div class="summary-value">{{ maxIncome.source }}<br><span>₺{{ maxIncome.amount | number:'1.0-0' }}</span></div>
+    </div>
+    <div class="summary-card min">
+      <div class="summary-label">En Az Gelir</div>
+      <div class="summary-value">{{ minIncome.source }}<br><span>₺{{ minIncome.amount | number:'1.0-0' }}</span></div>
+    </div>
+  </div>
+  <div class="income-list-section">
+    <h3>Son Ayın Gelirleri</h3>
+    <div class="income-list">
+      <div class="income-item" *ngFor="let inc of lastMonthIncomes">
+        <span class="income-source">{{ inc.source }}</span>
+        <span class="income-amount">₺{{ inc.amount | number:'1.0-0' }}</span>
+      </div>
+    </div>
+  </div>
+</div> 

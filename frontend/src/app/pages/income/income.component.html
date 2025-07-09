@@ -1,0 +1,248 @@
+<div class="income-page-full">
+  <!-- Hero Header Section -->
+  <div class="hero-header">
+    <div class="hero-content">
+      <div class="hero-left">
+        <div class="hero-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="hero-text">
+          <h1 class="hero-title">Gelir Yönetimi</h1>
+          <p class="hero-subtitle">Finansal başarınızı takip edin ve gelirlerinizi optimize edin</p>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-card primary-gradient">
+          <div class="stat-icon">
+            <i class="fas fa-coins"></i>
+          </div>
+          <div class="stat-content">
+            <span class="stat-label">Toplam Gelir</span>
+            <span class="stat-value">₺{{ totalAmount | number:'1.0-0' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card success-gradient">
+      <div class="stat-icon">
+        <i class="fas fa-calendar-check"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">Bu Ay</span>
+        <span class="stat-value">₺{{ monthlyAmount | number:'1.0-0' }}</span>
+      </div>
+    </div>
+    <div class="stat-card warning-gradient">
+      <div class="stat-icon">
+        <i class="fas fa-list-ul"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">Toplam Kayıt</span>
+        <span class="stat-value">{{ incomes.length }}</span>
+      </div>
+    </div>
+    <div class="stat-card info-gradient">
+      <div class="stat-icon">
+        <i class="fas fa-filter"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">Filtrelenmiş</span>
+        <span class="stat-value">{{ filteredIncomes.length }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search and Filter Section -->
+  <div class="search-filter-section">
+    <div class="search-container">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input 
+          type="text" 
+          placeholder="Gelir kaynağı veya kategori ara..." 
+          [(ngModel)]="searchTerm"
+          class="search-input"
+        >
+      </div>
+    </div>
+    <div class="filter-container">
+      <button 
+        class="filter-btn" 
+        [class.active]="sortField === 'date'"
+        (click)="sortBy('date')"
+      >
+        <i class="fas fa-calendar"></i>
+        Tarih
+        <i class="fas sort-icon" [class.fa-sort-up]="sortField === 'date' && sortDirection === 'asc'" 
+           [class.fa-sort-down]="sortField === 'date' && sortDirection === 'desc'"></i>
+      </button>
+      <button 
+        class="filter-btn" 
+        [class.active]="sortField === 'amount'"
+        (click)="sortBy('amount')"
+      >
+        <i class="fas fa-coins"></i>
+        Tutar
+        <i class="fas sort-icon" [class.fa-sort-up]="sortField === 'amount' && sortDirection === 'asc'" 
+           [class.fa-sort-down]="sortField === 'amount' && sortDirection === 'desc'"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Form Section -->
+  <div class="form-section">
+    <div class="form-card">
+      <div class="form-header">
+        <div class="form-icon">
+          <i class="fas fa-plus-circle"></i>
+        </div>
+        <h3 class="form-title">{{ editingId ? 'Gelir Düzenle' : 'Yeni Gelir Ekle' }}</h3>
+      </div>
+      
+      <form [formGroup]="incomeForm" (ngSubmit)="editingId ? updateIncome() : addIncome()" class="income-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="source" class="form-label">
+              <i class="fas fa-tag"></i>
+              Gelir Kaynağı
+            </label>
+            <input 
+              type="text" 
+              id="source"
+              formControlName="source" 
+              placeholder="Örn: Telefon Satışı"
+              class="form-input"
+            >
+          </div>
+          <div class="form-group">
+            <label for="amount" class="form-label">
+              <i class="fas fa-coins"></i>
+              Tutar (₺)
+            </label>
+            <input 
+              type="number" 
+              id="amount"
+              formControlName="amount" 
+              placeholder="0"
+              class="form-input"
+            >
+          </div>
+          <div class="form-group">
+            <label for="date" class="form-label">
+              <i class="fas fa-calendar"></i>
+              Tarih
+            </label>
+            <input 
+              type="date" 
+              id="date"
+              formControlName="date" 
+              class="form-input"
+            >
+          </div>
+          <div class="form-group">
+            <label for="category" class="form-label">
+              <i class="fas fa-folder"></i>
+              Kategori
+            </label>
+            <select id="category" formControlName="category" class="form-input">
+              <option value="">Kategori Seçin</option>
+              <option *ngFor="let category of categories" [value]="category">
+                {{ category }}
+              </option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button 
+            type="submit" 
+            class="btn btn-primary"
+            [disabled]="incomeForm.invalid"
+          >
+            <i class="fas" [class.fa-plus]="!editingId" [class.fa-save]="editingId"></i>
+            {{ editingId ? 'Güncelle' : 'Ekle' }}
+          </button>
+          <button 
+            type="button" 
+            class="btn btn-secondary"
+            (click)="editingId = null; incomeForm.reset()"
+            *ngIf="editingId"
+          >
+            <i class="fas fa-times"></i>
+            İptal
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Results Section -->
+  <div class="results-section">
+    <div class="results-header">
+      <div class="results-title-section">
+        <div class="results-icon">
+          <i class="fas fa-list-alt"></i>
+        </div>
+        <div class="results-text">
+          <h3 class="results-title">Gelir Listesi</h3>
+          <span class="results-count">{{ filteredIncomes.length }} kayıt bulundu</span>
+        </div>
+      </div>
+      <div class="filtered-total">
+        <span class="total-label">Filtrelenmiş Toplam:</span>
+        <span class="total-value">₺{{ filteredTotalAmount | number:'1.0-0' }}</span>
+      </div>
+    </div>
+
+    <div class="income-list">
+      <div 
+        *ngFor="let income of filteredIncomes; trackBy: trackByIncome" 
+        class="income-item"
+        [class.newly-added]="lastAddedId === income.id"
+        [class.newly-updated]="lastUpdatedId === income.id"
+      >
+        <div class="income-info">
+          <div class="income-main">
+            <h4 class="income-source">{{ income.source }}</h4>
+            <div class="income-meta">
+              <span class="income-category">{{ income.category }}</span>
+              <span class="income-date">{{ income.date | date:'dd/MM/yyyy' }}</span>
+            </div>
+          </div>
+          <div class="income-amount-section">
+            <span class="income-amount">₺{{ income.amount | number:'1.0-0' }}</span>
+          </div>
+        </div>
+        
+        <div class="income-actions">
+          <button 
+            class="action-btn edit-btn"
+            (click)="editIncome(income)"
+            title="Düzenle"
+          >
+            <i class="fas fa-edit"></i>
+          </button>
+          <button 
+            class="action-btn delete-btn"
+            (click)="deleteIncome(income.id)"
+            title="Sil"
+          >
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="filteredIncomes.length === 0" class="empty-state">
+      <div class="empty-icon">
+        <i class="fas fa-inbox"></i>
+      </div>
+      <h3>Henüz gelir kaydı yok</h3>
+      <p>İlk gelir kaydınızı ekleyerek başlayın</p>
+    </div>
+  </div>
+</div> 

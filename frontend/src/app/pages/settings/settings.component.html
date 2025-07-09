@@ -1,0 +1,302 @@
+<div class="settings-page-full">
+  <!-- Hero Header Section -->
+  <div class="hero-header">
+    <div class="hero-content">
+      <div class="hero-left">
+        <div class="hero-icon">
+          <i class="fas fa-cog"></i>
+        </div>
+        <div class="hero-text">
+          <h1 class="hero-title">Ayarlar</h1>
+          <p class="hero-subtitle">Hesap bilgilerinizi, güvenlik ayarlarınızı ve tercihlerinizi yönetin</p>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-card primary-gradient">
+          <div class="stat-icon">
+            <i class="fas fa-user-shield"></i>
+          </div>
+          <div class="stat-content">
+            <span class="stat-label">Hesap Durumu</span>
+            <span class="stat-value">Aktif</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Grid -->
+  <div class="settings-grid">
+    <!-- Profil Bilgileri -->
+    <div class="settings-card">
+      <div class="card-header">
+        <div class="card-icon">
+          <i class="fas fa-user"></i>
+        </div>
+        <h3 class="card-title">Profil Bilgileri</h3>
+      </div>
+      <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="settings-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-user"></i>
+              Ad
+            </label>
+            <input 
+              type="text" 
+              formControlName="firstName" 
+              placeholder="Adınız"
+              class="form-input"
+              [class.error]="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched"
+            >
+            <div class="error-message" *ngIf="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched">
+              <span *ngIf="profileForm.get('firstName')?.errors?.['required']">Ad alanı zorunludur</span>
+              <span *ngIf="profileForm.get('firstName')?.errors?.['minlength']">Ad en az 2 karakter olmalıdır</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-user"></i>
+              Soyad
+            </label>
+            <input 
+              type="text" 
+              formControlName="lastName" 
+              placeholder="Soyadınız"
+              class="form-input"
+              [class.error]="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched"
+            >
+            <div class="error-message" *ngIf="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched">
+              <span *ngIf="profileForm.get('lastName')?.errors?.['required']">Soyad alanı zorunludur</span>
+              <span *ngIf="profileForm.get('lastName')?.errors?.['minlength']">Soyad en az 2 karakter olmalıdır</span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">
+            <i class="fas fa-envelope"></i>
+            E-posta
+          </label>
+          <input 
+            type="email" 
+            formControlName="email" 
+            placeholder="ornek@email.com"
+            class="form-input"
+            [class.error]="profileForm.get('email')?.invalid && profileForm.get('email')?.touched"
+          >
+          <div class="error-message" *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched">
+            <span *ngIf="profileForm.get('email')?.errors?.['required']">E-posta alanı zorunludur</span>
+            <span *ngIf="profileForm.get('email')?.errors?.['email']">Geçerli bir e-posta adresi girin</span>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" [disabled]="!isProfileFormValid">
+            <i class="fas fa-save"></i>
+            Profili Güncelle
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Şifre Değiştirme -->
+    <div class="settings-card">
+      <div class="card-header">
+        <div class="card-icon">
+          <i class="fas fa-lock"></i>
+        </div>
+        <h3 class="card-title">Şifre Değiştir</h3>
+      </div>
+      <form [formGroup]="passwordForm" (ngSubmit)="updatePassword()" class="settings-form">
+        <div class="form-group">
+          <label class="form-label">
+            <i class="fas fa-key"></i>
+            Mevcut Şifre
+          </label>
+          <input 
+            type="password" 
+            formControlName="currentPassword" 
+            placeholder="Mevcut şifreniz"
+            class="form-input"
+            [class.error]="passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched"
+          >
+        </div>
+        <div class="form-group">
+          <label class="form-label">
+            <i class="fas fa-lock"></i>
+            Yeni Şifre
+          </label>
+          <input 
+            type="password" 
+            formControlName="newPassword" 
+            placeholder="Yeni şifreniz"
+            class="form-input"
+            [class.error]="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched"
+          >
+          <!-- Şifre Güçlülük Göstergesi -->
+          <div class="password-strength" *ngIf="passwordForm.get('newPassword')?.value">
+            <div class="strength-bar">
+              <div class="strength-fill" [style.width.%]="getPasswordStrengthPercentage()" [style.background-color]="getPasswordStrength().color"></div>
+            </div>
+            <span class="strength-label" [style.color]="getPasswordStrength().color">
+              {{ getPasswordStrength().label }}
+            </span>
+          </div>
+          <div class="password-requirements">
+            <div class="requirement" [class.met]="hasUpperCase()">
+              <i class="fas" [class.fa-check]="hasUpperCase()" [class.fa-times]="!hasUpperCase()"></i>
+              En az bir büyük harf
+            </div>
+            <div class="requirement" [class.met]="hasLowerCase()">
+              <i class="fas" [class.fa-check]="hasLowerCase()" [class.fa-times]="!hasLowerCase()"></i>
+              En az bir küçük harf
+            </div>
+            <div class="requirement" [class.met]="hasNumbers()">
+              <i class="fas" [class.fa-check]="hasNumbers()" [class.fa-times]="!hasNumbers()"></i>
+              En az bir rakam
+            </div>
+            <div class="requirement" [class.met]="hasSpecialChar()">
+              <i class="fas" [class.fa-check]="hasSpecialChar()" [class.fa-times]="!hasSpecialChar()"></i>
+              En az bir özel karakter
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">
+            <i class="fas fa-lock"></i>
+            Yeni Şifre Tekrar
+          </label>
+          <input 
+            type="password" 
+            formControlName="confirmPassword" 
+            placeholder="Yeni şifrenizi tekrar girin"
+            class="form-input"
+            [class.error]="passwordForm.errors?.['passwordMismatch'] && passwordForm.get('confirmPassword')?.touched"
+          >
+          <div class="error-message" *ngIf="passwordForm.errors?.['passwordMismatch'] && passwordForm.get('confirmPassword')?.touched">
+            Şifreler eşleşmiyor
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" [disabled]="!isPasswordFormValid">
+            <i class="fas fa-key"></i>
+            Şifreyi Değiştir
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Bildirim Ayarları -->
+    <div class="settings-card">
+      <div class="card-header">
+        <div class="card-icon">
+          <i class="fas fa-bell"></i>
+        </div>
+        <h3 class="card-title">Bildirim Ayarları</h3>
+      </div>
+      <form [formGroup]="settingsForm" (ngSubmit)="updateSettings()" class="settings-form">
+        <div class="checkbox-group">
+          <div class="checkbox-item">
+            <input 
+              type="checkbox" 
+              id="emailNotifications" 
+              formControlName="emailNotifications"
+              class="checkbox-input"
+            >
+            <label for="emailNotifications" class="checkbox-label">
+              <i class="fas fa-envelope"></i>
+              E-posta Bildirimleri
+            </label>
+            <p class="checkbox-description">Önemli güncellemeler ve hatırlatmalar için e-posta al</p>
+          </div>
+          <div class="checkbox-item">
+            <input 
+              type="checkbox" 
+              id="dailyReminders" 
+              formControlName="dailyReminders"
+              class="checkbox-input"
+            >
+            <label for="dailyReminders" class="checkbox-label">
+              <i class="fas fa-calendar-check"></i>
+              Günlük Hatırlatmalar
+            </label>
+            <p class="checkbox-description">Günlük özet ve hatırlatmalar için bildirim al</p>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" [disabled]="!isSettingsFormValid">
+            <i class="fas fa-save"></i>
+            Ayarları Kaydet
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Görünüm ve Dil -->
+    <div class="settings-card">
+      <div class="card-header">
+        <div class="card-icon">
+          <i class="fas fa-palette"></i>
+        </div>
+        <h3 class="card-title">Görünüm ve Dil</h3>
+      </div>
+      <div class="settings-form">
+        <div class="form-group">
+          <label class="form-label">
+            <i class="fas fa-paint-brush"></i>
+            Tema Seçimi
+          </label>
+          <div class="theme-selector">
+            <div 
+              *ngFor="let theme of themes" 
+              class="theme-option"
+              [class.active]="userSettings.theme === theme.value"
+              (click)="changeTheme(theme.value)"
+            >
+              <i [class]="theme.icon"></i>
+              <span>{{ theme.label }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">
+            <i class="fas fa-globe"></i>
+            Dil Seçimi
+          </label>
+          <div class="language-selector">
+            <div 
+              *ngFor="let lang of languages" 
+              class="language-option"
+              [class.active]="userSettings.language === lang.value"
+              (click)="changeLanguage(lang.value)"
+            >
+              <span class="language-icon">{{ lang.icon }}</span>
+              <span>{{ lang.label }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hesap Yönetimi -->
+    <div class="settings-card danger-zone">
+      <div class="card-header">
+        <div class="card-icon">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h3 class="card-title">Hesap Yönetimi</h3>
+      </div>
+      <div class="danger-actions">
+        <div class="danger-action">
+          <div class="action-info">
+            <h4>Ayarları Sıfırla</h4>
+            <p>Tüm ayarlarınızı varsayılan değerlere döndürür</p>
+          </div>
+          <button class="btn btn-danger" (click)="resetAllSettings()">
+            <i class="fas fa-undo"></i>
+            Sıfırla
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

@@ -1,0 +1,186 @@
+<!-- Menüden sonraki tüm alanı kapsayan modern notlar sayfası -->
+<div class="notes-page-full">
+  <!-- Hero Header Section -->
+  <div class="hero-header">
+    <div class="hero-content">
+      <div class="hero-left">
+        <div class="hero-icon">
+          <i class="fas fa-sticky-note"></i>
+        </div>
+        <div class="hero-text">
+          <h1 class="hero-title">Notlar</h1>
+          <p class="hero-subtitle">Tüm önemli notlarınızı, hatırlatıcılarınızı ve finansal takiplerinizi tek ekranda yönetin</p>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-card primary-gradient">
+          <div class="stat-icon">
+            <i class="fas fa-sticky-note"></i>
+          </div>
+          <div class="stat-content">
+            <span class="stat-label">Toplam Not</span>
+            <span class="stat-value">{{ totalNotes }}</span>
+          </div>
+        </div>
+        <div class="stat-card warning-gradient">
+          <div class="stat-icon">
+            <i class="fas fa-bell"></i>
+          </div>
+          <div class="stat-content">
+            <span class="stat-label">Hatırlatmalı</span>
+            <span class="stat-value">{{ reminderNotes }}</span>
+          </div>
+        </div>
+        <div class="stat-card danger-gradient">
+          <div class="stat-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <div class="stat-content">
+            <span class="stat-label">Acil Hatırlatma</span>
+            <span class="stat-value">{{ overdueReminders }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search & Filter Section -->
+  <div class="search-filter-section">
+    <div class="search-container">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input 
+          type="text" 
+          placeholder="Başlık veya içerikte ara..." 
+          [(ngModel)]="searchTerm"
+          class="search-input"
+        >
+      </div>
+    </div>
+    <div class="filter-container">
+      <select class="filter-btn" [(ngModel)]="selectedTag">
+        <option value="">Tüm Etiketler</option>
+        <option *ngFor="let tag of tags" [value]="tag">{{ tag }}</option>
+      </select>
+      <button class="filter-btn" [class.active]="showRemindersOnly" (click)="showRemindersOnly = !showRemindersOnly">
+        <i class="fas fa-bell"></i> Hatırlatmalı
+      </button>
+      <button class="filter-btn" (click)="clearFilters()">
+        <i class="fas fa-times"></i> Temizle
+      </button>
+      <button class="filter-btn" [class.active]="sortField === 'createdAt'" (click)="sortBy('createdAt')">
+        <i class="fas fa-sort-amount-down"></i> Tarih
+        <i class="fas sort-icon" [class.fa-sort-up]="sortField === 'createdAt' && sortDirection === 'asc'" [class.fa-sort-down]="sortField === 'createdAt' && sortDirection === 'desc'"></i>
+      </button>
+      <button class="filter-btn" [class.active]="sortField === 'title'" (click)="sortBy('title')">
+        <i class="fas fa-sort-alpha-down"></i> Başlık
+        <i class="fas sort-icon" [class.fa-sort-up]="sortField === 'title' && sortDirection === 'asc'" [class.fa-sort-down]="sortField === 'title' && sortDirection === 'desc'"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Not Ekle / Düzenle Formu -->
+  <div class="form-section">
+    <div class="form-card">
+      <div class="form-header">
+        <div class="form-icon">
+          <i class="fas fa-plus-circle"></i>
+        </div>
+        <h3 class="form-title">{{ editingId ? 'Notu Düzenle' : 'Yeni Not Ekle' }}</h3>
+      </div>
+      <form [formGroup]="noteForm" (ngSubmit)="editingId ? updateNote() : addNote()" class="note-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label"><i class="fas fa-heading"></i> Başlık</label>
+            <input type="text" formControlName="title" placeholder="Not başlığı" class="form-input">
+          </div>
+          <div class="form-group">
+            <label class="form-label"><i class="fas fa-tags"></i> Etiket</label>
+            <select formControlName="tag" class="form-input">
+              <option value="">Etiket Seçin</option>
+              <option *ngFor="let tag of tags" [value]="tag">{{ tag }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label"><i class="fas fa-calendar-plus"></i> Hatırlatma Tarihi</label>
+            <input type="date" formControlName="reminderDate" class="form-input">
+          </div>
+          <div class="form-group">
+            <label class="form-label"><i class="fas fa-clock"></i> Hatırlatma Saati</label>
+            <input type="time" formControlName="reminderTime" class="form-input">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label"><i class="fas fa-align-left"></i> İçerik</label>
+          <textarea formControlName="content" rows="3" placeholder="Not içeriği..." class="form-input"></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" [disabled]="noteForm.invalid">
+            <i class="fas" [class.fa-save]="editingId" [class.fa-plus]="!editingId"></i>
+            {{ editingId ? 'Güncelle' : 'Ekle' }}
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="editingId = null; noteForm.reset()" *ngIf="editingId">
+            <i class="fas fa-times"></i> İptal
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Notlar Listesi -->
+  <div class="results-section">
+    <div class="results-header">
+      <div class="results-title-section">
+        <div class="results-icon">
+          <i class="fas fa-list-alt"></i>
+        </div>
+        <div class="results-text">
+          <h3 class="results-title">Notlar Listesi</h3>
+          <span class="results-count">{{ sortedNotes.length }} not bulundu</span>
+        </div>
+      </div>
+    </div>
+    <div class="notes-grid">
+      <div *ngFor="let note of sortedNotes; trackBy: trackByNote" 
+           class="note-card"
+           [class.newly-added]="lastAddedId === note.id"
+           [class.newly-updated]="lastUpdatedId === note.id"
+           [class.overdue]="isOverdue(note)"
+      >
+        <div class="note-header">
+          <span class="note-tag" [ngClass]="getTagColor(note.tag)">
+            <i [class]="getTagIcon(note.tag)"></i> {{ note.tag }}
+          </span>
+          <span class="note-date">
+            <i class="fas fa-calendar-alt"></i>
+            {{ note.createdAt | date:'dd MMM yyyy HH:mm' }}
+          </span>
+        </div>
+        <h4 class="note-title">{{ note.title }}</h4>
+        <div class="note-content">{{ note.content }}</div>
+        <div class="note-reminder" *ngIf="note.reminderDate">
+          <i class="fas fa-bell"></i>
+          <span [ngClass]="{'reminder-overdue': isOverdue(note)}">
+            {{ note.reminderDate | date:'dd MMM yyyy HH:mm' }}
+            <span *ngIf="isOverdue(note)">- <b>Hatırlatma Zamanı Geldi!</b></span>
+          </span>
+        </div>
+        <div class="note-actions">
+          <button class="action-btn edit-btn" (click)="editNote(note)" title="Düzenle">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="action-btn delete-btn" (click)="deleteNote(note.id)" title="Sil">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="sortedNotes.length === 0" class="empty-state">
+      <div class="empty-icon">
+        <i class="fas fa-sticky-note"></i>
+      </div>
+      <h3>Henüz not yok</h3>
+      <p>İlk notunuzu ekleyerek başlayın</p>
+    </div>
+  </div>
+</div> 

@@ -1,0 +1,265 @@
+<div class="accessories-page-full">
+  <!-- Hero Header Section -->
+  <div class="hero-header">
+    <div class="hero-content">
+      <div class="hero-left">
+        <div class="hero-icon">
+          <i class="fas fa-headphones"></i>
+        </div>
+        <div class="hero-text">
+          <h1 class="hero-title">Aksesuar Yönetimi</h1>
+          <p class="hero-subtitle">Aksesuar stoklarınızı takip edin ve envanterinizi optimize edin</p>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-card primary-gradient">
+          <div class="stat-icon">
+            <i class="fas fa-coins"></i>
+          </div>
+          <div class="stat-content">
+            <span class="stat-label">Toplam Değer</span>
+            <span class="stat-value">₺{{ totalValue | number:'1.0-0' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card success-gradient">
+      <div class="stat-icon">
+        <i class="fas fa-boxes"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">Toplam Adet</span>
+        <span class="stat-value">{{ totalItems }}</span>
+      </div>
+    </div>
+    <div class="stat-card warning-gradient">
+      <div class="stat-icon">
+        <i class="fas fa-list-ul"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">Ürün Çeşidi</span>
+        <span class="stat-value">{{ accessories.length }}</span>
+      </div>
+    </div>
+    <div class="stat-card info-gradient">
+      <div class="stat-icon">
+        <i class="fas fa-filter"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">Filtrelenmiş</span>
+        <span class="stat-value">{{ filteredAccessories.length }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search and Filter Section -->
+  <div class="search-filter-section">
+    <div class="search-container">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input 
+          type="text" 
+          placeholder="Aksesuar adı veya kategori ara..." 
+          [(ngModel)]="searchTerm"
+          class="search-input"
+        >
+      </div>
+    </div>
+    <div class="filter-container">
+      <button 
+        class="filter-btn" 
+        [class.active]="sortField === 'name'"
+        (click)="sortBy('name')"
+      >
+        <i class="fas fa-sort-alpha-down"></i>
+        İsim
+        <i class="fas sort-icon" [class.fa-sort-up]="sortField === 'name' && sortDirection === 'asc'" 
+           [class.fa-sort-down]="sortField === 'name' && sortDirection === 'desc'"></i>
+      </button>
+      <button 
+        class="filter-btn" 
+        [class.active]="sortField === 'price'"
+        (click)="sortBy('price')"
+      >
+        <i class="fas fa-coins"></i>
+        Fiyat
+        <i class="fas sort-icon" [class.fa-sort-up]="sortField === 'price' && sortDirection === 'asc'" 
+           [class.fa-sort-down]="sortField === 'price' && sortDirection === 'desc'"></i>
+      </button>
+      <button 
+        class="filter-btn" 
+        [class.active]="sortField === 'stock'"
+        (click)="sortBy('stock')"
+      >
+        <i class="fas fa-boxes"></i>
+        Stok
+        <i class="fas sort-icon" [class.fa-sort-up]="sortField === 'stock' && sortDirection === 'asc'" 
+           [class.fa-sort-down]="sortField === 'stock' && sortDirection === 'desc'"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Form Section -->
+  <div class="form-section">
+    <div class="form-card">
+      <div class="form-header">
+        <div class="form-icon">
+          <i class="fas fa-plus-circle"></i>
+        </div>
+        <h3 class="form-title">{{ editingId ? 'Aksesuar Düzenle' : 'Yeni Aksesuar Ekle' }}</h3>
+      </div>
+      
+      <form [formGroup]="accessoryForm" (ngSubmit)="editingId ? updateAccessory() : addAccessory()" class="accessory-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-tag"></i>
+              Aksesuar Adı
+            </label>
+            <input 
+              type="text" 
+              formControlName="name" 
+              placeholder="Örn: iPhone Kılıfı"
+              class="form-input"
+            >
+          </div>
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-folder"></i>
+              Kategori
+            </label>
+            <select formControlName="category" class="form-input">
+              <option value="">Kategori Seçin</option>
+              <option *ngFor="let category of categories" [value]="category">
+                {{ category }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-coins"></i>
+              Fiyat (₺)
+            </label>
+            <input 
+              type="number" 
+              formControlName="price" 
+              placeholder="0"
+              class="form-input"
+            >
+          </div>
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-boxes"></i>
+              Stok Adedi
+            </label>
+            <input 
+              type="number" 
+              formControlName="stock" 
+              placeholder="0"
+              class="form-input"
+            >
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button 
+            type="submit" 
+            class="btn btn-primary"
+            [disabled]="accessoryForm.invalid"
+          >
+            <i class="fas" [class.fa-save]="editingId" [class.fa-plus]="!editingId"></i>
+            {{ editingId ? 'Güncelle' : 'Ekle' }}
+          </button>
+          <button 
+            type="button" 
+            class="btn btn-secondary"
+            (click)="editingId = null; accessoryForm.reset()"
+            *ngIf="editingId"
+          >
+            <i class="fas fa-times"></i>
+            İptal
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Results Section -->
+  <div class="results-section">
+    <div class="results-header">
+      <div class="results-title-section">
+        <div class="results-icon">
+          <i class="fas fa-list-alt"></i>
+        </div>
+        <div class="results-text">
+          <h3 class="results-title">Aksesuar Listesi</h3>
+          <span class="results-count">{{ filteredAccessories.length }} ürün bulundu</span>
+        </div>
+      </div>
+      <div class="filtered-total">
+        <span class="total-label">Filtrelenmiş Toplam Değer:</span>
+        <span class="total-value">₺{{ filteredTotalValue | number:'1.0-0' }}</span>
+      </div>
+    </div>
+
+    <div class="accessories-grid">
+      <div 
+        *ngFor="let accessory of filteredAccessories; trackBy: trackByAccessory" 
+        class="accessory-card"
+        [class.newly-added]="lastAddedId === accessory.id"
+        [class.newly-updated]="lastUpdatedId === accessory.id"
+      >
+        <div class="accessory-header">
+          <h4 class="accessory-name">{{ accessory.name }}</h4>
+          <span class="accessory-category">{{ accessory.category }}</span>
+        </div>
+        
+        <div class="accessory-details">
+          <div class="detail-item">
+            <span class="detail-label">Fiyat:</span>
+            <span class="detail-value price">₺{{ accessory.price | number:'1.0-0' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Stok:</span>
+            <span class="detail-value stock" [class.low-stock]="accessory.stock < 10">
+              {{ accessory.stock }} adet
+            </span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Toplam Değer:</span>
+            <span class="detail-value total">₺{{ (accessory.price * accessory.stock) | number:'1.0-0' }}</span>
+          </div>
+        </div>
+        
+        <div class="accessory-actions">
+          <button 
+            class="action-btn edit-btn"
+            (click)="editAccessory(accessory)"
+            title="Düzenle"
+          >
+            <i class="fas fa-edit"></i>
+          </button>
+          <button 
+            class="action-btn delete-btn"
+            (click)="deleteAccessory(accessory.id)"
+            title="Sil"
+          >
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="filteredAccessories.length === 0" class="empty-state">
+      <div class="empty-icon">
+        <i class="fas fa-box-open"></i>
+      </div>
+      <h3>Henüz aksesuar yok</h3>
+      <p>İlk aksesuarınızı ekleyerek başlayın</p>
+    </div>
+  </div>
+</div> 

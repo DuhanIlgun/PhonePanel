@@ -1,0 +1,133 @@
+.login-page-bg {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-card {
+  background: #fff;
+  border-radius: 1.25rem;
+  box-shadow: 0 8px 32px rgba(76, 81, 255, 0.10), 0 1.5px 6px rgba(76, 81, 255, 0.08);
+  padding: 2.5rem 2rem 2rem 2rem;
+  max-width: 380px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  animation: fadeIn 0.7s cubic-bezier(.39,.575,.56,1.000);
+}
+
+.login-logo {
+  font-size: 2.5rem;
+  color: #667eea;
+  margin-bottom: 1rem;
+}
+
+.login-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  color: #333;
+}
+
+.login-subtitle {
+  font-size: 1rem;
+  color: #888;
+  margin-bottom: 2rem;
+}
+
+.login-form {
+  .form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+
+    label {
+      font-weight: 500;
+      color: #555;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: 0.75rem;
+      border: 1.5px solid #e0e0e0;
+      font-size: 1rem;
+      background: #f8f9fa;
+      transition: border-color 0.2s;
+      margin-top: 0.25rem;
+
+      &.invalid {
+        border-color: #fa709a;
+        background: #fff0f3;
+      }
+      &:focus {
+        outline: none;
+        border-color: #667eea;
+        background: #fff;
+      }
+    }
+  }
+
+  .error-message {
+    color: #fa709a;
+    font-size: 0.95rem;
+    margin-top: 0.25rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    animation: shake 0.3s;
+  }
+
+  .login-btn {
+    width: 100%;
+    padding: 0.85rem 0;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    border: none;
+    border-radius: 0.75rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.10);
+    transition: background 0.2s, transform 0.15s;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    &:hover:not(:disabled) {
+      background: linear-gradient(90deg, #764ba2 0%, #667eea 100%);
+      transform: translateY(-2px) scale(1.03);
+    }
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    i {
+      font-size: 1rem;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-2px); }
+  80% { transform: translateX(2px); }
+  100% { transform: translateX(0); }
+}
+  

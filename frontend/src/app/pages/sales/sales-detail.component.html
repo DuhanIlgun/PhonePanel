@@ -1,0 +1,29 @@
+<div class="sales-detail-bg">
+  <div class="sales-detail-header">
+    <h2><i class="fas fa-chart-line"></i> Satışlar Detay</h2>
+    <p>Son ayın satış özetleri ve analizleri</p>
+  </div>
+  <div class="sales-detail-cards">
+    <div class="summary-card total">
+      <div class="summary-label">Toplam Satış</div>
+      <div class="summary-value">₺{{ total | number:'1.0-0' }}</div>
+    </div>
+    <div class="summary-card max">
+      <div class="summary-label">En Yüksek Satış</div>
+      <div class="summary-value">{{ maxSale.name }}<br><span>₺{{ maxSale.amount | number:'1.0-0' }}</span></div>
+    </div>
+    <div class="summary-card min">
+      <div class="summary-label">En Düşük Satış</div>
+      <div class="summary-value">{{ minSale.name }}<br><span>₺{{ minSale.amount | number:'1.0-0' }}</span></div>
+    </div>
+  </div>
+  <div class="sales-list-section">
+    <h3>Son Ayın Satışları</h3>
+    <div class="sales-list">
+      <div class="sale-item" *ngFor="let sale of lastMonthSales">
+        <span class="sale-name">{{ sale.name }}</span>
+        <span class="sale-amount">₺{{ sale.amount | number:'1.0-0' }}</span>
+      </div>
+    </div>
+  </div>
+</div> 

@@ -1,0 +1,25 @@
+<div class="notes-detail-bg">
+  <div class="notes-detail-header">
+    <h2><i class="fas fa-sticky-note"></i> Notlar Detay</h2>
+    <p>Son ayın not özetleri ve aktiviteleri</p>
+  </div>
+  <div class="notes-detail-cards">
+    <div class="summary-card total">
+      <div class="summary-label">Toplam Not</div>
+      <div class="summary-value">{{ total }}</div>
+    </div>
+    <div class="summary-card latest">
+      <div class="summary-label">Son Not</div>
+      <div class="summary-value">{{ latestNote.title }}<br><span>{{ latestNote.date }}</span></div>
+    </div>
+  </div>
+  <div class="notes-list-section">
+    <h3>Son Ayın Notları</h3>
+    <div class="notes-list">
+      <div class="note-item" *ngFor="let note of lastMonthNotes">
+        <span class="note-title">{{ note.title }}</span>
+        <span class="note-date">{{ note.date }}</span>
+      </div>
+    </div>
+  </div>
+</div> 

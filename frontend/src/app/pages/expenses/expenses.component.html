@@ -1,0 +1,234 @@
+<div class="expenses-page-full">
+  <!-- Hero Header Section -->
+  <div class="hero-header">
+    <div class="hero-content">
+      <div class="hero-left">
+        <div class="hero-icon">
+          <i class="fas fa-receipt"></i>
+        </div>
+        <div class="hero-text">
+          <h1 class="hero-title">Gider Yönetimi</h1>
+          <p class="hero-subtitle">Giderlerinizi takip edin ve maliyetlerinizi optimize edin</p>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-card primary-gradient">
+          <div class="stat-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="stat-content">
+            <span class="stat-label">Toplam Gider</span>
+            <span class="stat-value">₺{{ totalAmount | number:'1.0-0' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card success-gradient">
+      <div class="stat-icon">
+        <i class="fas fa-calendar-check"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">Bu Ay</span>
+        <span class="stat-value">₺{{ monthlyAmount | number:'1.0-0' }}</span>
+      </div>
+    </div>
+    <div class="stat-card warning-gradient">
+      <div class="stat-icon">
+        <i class="fas fa-list-ul"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">Toplam Kayıt</span>
+        <span class="stat-value">{{ expenses.length }}</span>
+      </div>
+    </div>
+    <div class="stat-card info-gradient">
+      <div class="stat-icon">
+        <i class="fas fa-filter"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">Filtrelenmiş</span>
+        <span class="stat-value">{{ filteredExpenses.length }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search and Filter Section -->
+  <div class="search-filter-section">
+    <div class="search-container">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input 
+          type="text" 
+          placeholder="Gider adı ara..." 
+          [(ngModel)]="searchTerm"
+          class="search-input"
+        >
+      </div>
+    </div>
+    <div class="filter-container">
+      <button 
+        class="filter-btn" 
+        [class.active]="sortField === 'date'"
+        (click)="sortBy('date')"
+      >
+        <i class="fas fa-calendar"></i>
+        Tarih
+        <i class="fas sort-icon" [class.fa-sort-up]="sortField === 'date' && sortDirection === 'asc'" 
+           [class.fa-sort-down]="sortField === 'date' && sortDirection === 'desc'"></i>
+      </button>
+      <button 
+        class="filter-btn" 
+        [class.active]="sortField === 'amount'"
+        (click)="sortBy('amount')"
+      >
+        <i class="fas fa-coins"></i>
+        Tutar
+        <i class="fas sort-icon" [class.fa-sort-up]="sortField === 'amount' && sortDirection === 'asc'" 
+           [class.fa-sort-down]="sortField === 'amount' && sortDirection === 'desc'"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Form Section -->
+  <div class="form-section">
+    <div class="form-card">
+      <div class="form-header">
+        <div class="form-icon">
+          <i class="fas fa-plus-circle"></i>
+        </div>
+        <h3 class="form-title">{{ editingId ? 'Gider Düzenle' : 'Yeni Gider Ekle' }}</h3>
+      </div>
+      
+      <form [formGroup]="expenseForm" (ngSubmit)="editingId ? updateExpense() : addExpense()" class="expense-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-tag"></i>
+              Gider Adı
+            </label>
+            <input 
+              type="text" 
+              formControlName="name" 
+              placeholder="Örn: Elektrik Faturası"
+              class="form-input"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-coins"></i>
+              Tutar (₺)
+            </label>
+            <input 
+              type="number" 
+              formControlName="amount" 
+              placeholder="0"
+              class="form-input"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-calendar"></i>
+              Tarih
+            </label>
+            <input 
+              type="date" 
+              formControlName="date" 
+              class="form-input"
+            />
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button 
+            type="submit" 
+            class="btn btn-primary"
+            [disabled]="expenseForm.invalid"
+          >
+            <i class="fas" [class.fa-save]="editingId" [class.fa-plus]="!editingId"></i>
+            {{ editingId ? 'Güncelle' : 'Ekle' }}
+          </button>
+          <button 
+            type="button" 
+            class="btn btn-secondary"
+            (click)="editingId = null; expenseForm.reset()"
+            *ngIf="editingId"
+          >
+            <i class="fas fa-times"></i>
+            İptal
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Results Section -->
+  <div class="results-section">
+    <div class="results-header">
+      <div class="results-title-section">
+        <div class="results-icon">
+          <i class="fas fa-list-alt"></i>
+        </div>
+        <div class="results-text">
+          <h3 class="results-title">Gider Listesi</h3>
+          <span class="results-count">{{ filteredExpenses.length }} kayıt bulundu</span>
+        </div>
+      </div>
+      <div class="filtered-total">
+        <span class="total-label">Filtrelenmiş Toplam:</span>
+        <span class="total-value">₺{{ filteredTotalAmount | number:'1.0-0' }}</span>
+      </div>
+    </div>
+
+    <div class="expenses-list">
+      <div 
+        *ngFor="let expense of filteredExpenses; trackBy: trackByExpense" 
+        class="expense-item"
+        [class.newly-added]="lastAddedId === expense.id"
+        [class.newly-updated]="lastUpdatedId === expense.id"
+      >
+        <div class="expense-info">
+          <div class="expense-main">
+            <h4 class="expense-name">{{ expense.name }}</h4>
+            <div class="expense-meta">
+              <span class="expense-date">{{ expense.date | date:'dd/MM/yyyy' }}</span>
+            </div>
+          </div>
+          <div class="expense-amount-section">
+            <span class="expense-amount">₺{{ expense.amount | number:'1.0-0' }}</span>
+          </div>
+        </div>
+        
+        <div class="expense-actions">
+          <button 
+            class="action-btn edit-btn"
+            (click)="editExpense(expense)"
+            title="Düzenle"
+          >
+            <i class="fas fa-edit"></i>
+          </button>
+          <button 
+            class="action-btn delete-btn"
+            (click)="deleteExpense(expense.id)"
+            title="Sil"
+          >
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="filteredExpenses.length === 0" class="empty-state">
+      <div class="empty-icon">
+        <i class="fas fa-receipt"></i>
+      </div>
+      <h3>Henüz gider kaydı yok</h3>
+      <p>İlk gider kaydınızı ekleyerek başlayın</p>
+    </div>
+  </div>
+</div>
+
+

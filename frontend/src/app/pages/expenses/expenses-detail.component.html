@@ -1,0 +1,29 @@
+<div class="expenses-detail-bg">
+  <div class="expenses-detail-header">
+    <h2><i class="fas fa-receipt"></i> Giderler Detay</h2>
+    <p>Son ayın gider özetleri ve analizleri</p>
+  </div>
+  <div class="expenses-detail-cards">
+    <div class="summary-card total">
+      <div class="summary-label">Toplam Gider</div>
+      <div class="summary-value">₺{{ total | number:'1.0-0' }}</div>
+    </div>
+    <div class="summary-card max">
+      <div class="summary-label">En Fazla Gider</div>
+      <div class="summary-value">{{ maxExpense.name }}<br><span>₺{{ maxExpense.amount | number:'1.0-0' }}</span></div>
+    </div>
+    <div class="summary-card min">
+      <div class="summary-label">En Az Gider</div>
+      <div class="summary-value">{{ minExpense.name }}<br><span>₺{{ minExpense.amount | number:'1.0-0' }}</span></div>
+    </div>
+  </div>
+  <div class="expenses-list-section">
+    <h3>Son Ayın Giderleri</h3>
+    <div class="expenses-list">
+      <div class="expense-item" *ngFor="let exp of lastMonthExpenses">
+        <span class="expense-name">{{ exp.name }}</span>
+        <span class="expense-amount">₺{{ exp.amount | number:'1.0-0' }}</span>
+      </div>
+    </div>
+  </div>
+</div> 

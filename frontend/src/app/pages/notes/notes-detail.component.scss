@@ -1,0 +1,87 @@
+.notes-detail-bg {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2.5rem 1rem 2rem 1rem;
+}
+
+.notes-detail-header {
+  text-align: center;
+  margin-bottom: 2.2rem;
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #764ba2;
+    margin-bottom: 0.5rem;
+    i {
+      color: #667eea;
+      margin-right: 0.5rem;
+    }
+  }
+  p {
+    color: #888;
+    font-size: 1.1rem;
+  }
+}
+
+.notes-detail-cards {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+}
+.summary-card {
+  background: #fff;
+  border-radius: 1.1rem;
+  box-shadow: 0 4px 24px rgba(102, 126, 234, 0.08);
+  padding: 1.5rem 2rem;
+  min-width: 180px;
+  text-align: center;
+  .summary-label {
+    color: #888;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .summary-value {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #333;
+    span {
+      color: #764ba2;
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+  }
+  &.total .summary-value { color: #764ba2; }
+  &.latest .summary-value { color: #43e97b; }
+}
+
+.notes-list-section {
+  margin-top: 2.5rem;
+  h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1.2rem;
+  }
+  .notes-list {
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.07);
+    padding: 1.2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    .note-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.05rem;
+      padding: 0.5rem 0.2rem;
+      border-bottom: 1px solid #f0f0f0;
+      &:last-child { border-bottom: none; }
+      .note-title { color: #555; }
+      .note-date { color: #764ba2; font-weight: 600; }
+    }
+  }
+} 

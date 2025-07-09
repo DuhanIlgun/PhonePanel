@@ -1,0 +1,25 @@
+<div class="settings-detail-bg">
+  <div class="settings-detail-header">
+    <h2><i class="fas fa-cog"></i> Ayarlar Detay</h2>
+    <p>Son ayın ayar değişiklikleri ve aktiviteleri</p>
+  </div>
+  <div class="settings-detail-cards">
+    <div class="summary-card total">
+      <div class="summary-label">Toplam Değişiklik</div>
+      <div class="summary-value">{{ total }}</div>
+    </div>
+    <div class="summary-card latest">
+      <div class="summary-label">Son Değişiklik</div>
+      <div class="summary-value">{{ latestSetting.action }}<br><span>{{ latestSetting.date }}</span></div>
+    </div>
+  </div>
+  <div class="settings-list-section">
+    <h3>Son Ayın Ayar Değişiklikleri</h3>
+    <div class="settings-list">
+      <div class="setting-item" *ngFor="let setting of lastMonthSettings">
+        <span class="setting-action">{{ setting.action }}</span>
+        <span class="setting-date">{{ setting.date }}</span>
+      </div>
+    </div>
+  </div>
+</div> 

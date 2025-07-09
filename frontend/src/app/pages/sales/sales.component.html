@@ -1,0 +1,316 @@
+<div class="sales-page-full">
+  <!-- Hero Header Section -->
+  <div class="hero-header">
+    <div class="hero-content">
+      <div class="hero-left">
+        <div class="hero-icon">
+          <i class="fas fa-shopping-cart"></i>
+        </div>
+        <div class="hero-text">
+          <h1 class="hero-title">Satış Yönetimi</h1>
+          <p class="hero-subtitle">Müşteri satışlarınızı takip edin ve satış performansınızı optimize edin</p>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-card primary-gradient">
+          <div class="stat-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="stat-content">
+            <span class="stat-label">Toplam Satış</span>
+            <span class="stat-value">₺{{ totalSalesAmount | number:'1.0-0' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card success-gradient">
+      <div class="stat-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">Tamamlanan</span>
+        <span class="stat-value">{{ completedSalesCount }}</span>
+      </div>
+    </div>
+    <div class="stat-card warning-gradient">
+      <div class="stat-icon">
+        <i class="fas fa-clock"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">Bekleyen</span>
+        <span class="stat-value">{{ pendingSalesCount }}</span>
+      </div>
+    </div>
+    <div class="stat-card info-gradient">
+      <div class="stat-icon">
+        <i class="fas fa-list-ul"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">Toplam Kayıt</span>
+        <span class="stat-value">{{ sales.length }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search and Filter Section -->
+  <div class="search-filter-section">
+    <div class="search-container">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input 
+          type="text" 
+          placeholder="Müşteri, ürün, personel, ID, telefon ara..." 
+          [(ngModel)]="filterValue"
+          class="search-input"
+        >
+      </div>
+    </div>
+    <div class="filter-container">
+      <select class="filter-select" [(ngModel)]="statusFilter">
+        <option value="">Tüm Durumlar</option>
+        <option value="Tamamlandı">Tamamlandı</option>
+        <option value="Bekliyor">Bekliyor</option>
+        <option value="İade">İade</option>
+      </select>
+      <button class="btn btn-primary" (click)="openSaleForm()">
+        <i class="fas fa-plus"></i>
+        Yeni Satış
+      </button>
+    </div>
+  </div>
+
+  <!-- Results Section -->
+  <div class="results-section">
+    <div class="results-header">
+      <div class="results-title-section">
+        <div class="results-icon">
+          <i class="fas fa-receipt"></i>
+        </div>
+        <div class="results-text">
+          <h3 class="results-title">Satış Listesi</h3>
+          <span class="results-count">{{ filteredSales.length }} kayıt bulundu</span>
+        </div>
+      </div>
+      <div class="filtered-total">
+        <span class="total-label">Filtrelenmiş Toplam:</span>
+        <span class="total-value">₺{{ filteredTotalAmount | number:'1.0-0' }}</span>
+      </div>
+    </div>
+
+    <div class="sales-list">
+      <div 
+        *ngFor="let sale of filteredSales; trackBy: trackBySale" 
+        class="sale-item"
+        [class.newly-added]="lastAddedId === sale.id"
+        [class.newly-updated]="lastUpdatedId === sale.id"
+      >
+        <div class="sale-info">
+          <div class="sale-main">
+            <div class="sale-header">
+              <h4 class="sale-id">#{{ sale.id }}</h4>
+              <span class="sale-status" [ngClass]="{
+                'status-completed': sale.status === 'Tamamlandı',
+                'status-pending': sale.status === 'Bekliyor',
+                'status-returned': sale.status === 'İade'
+              }">{{ sale.status }}</span>
+            </div>
+            <div class="sale-details">
+              <div class="customer-info">
+                <span class="customer-name">{{ sale.customer }}</span>
+                <span class="customer-phone">{{ sale.customerPhone }}</span>
+              </div>
+              <div class="product-info">
+                <span class="products">{{ sale.products }}</span>
+                <span class="quantity">Miktar: {{ sale.quantity }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="sale-amount-section">
+            <span class="sale-amount">₺{{ sale.total | number:'1.0-0' }}</span>
+            <div class="sale-meta">
+              <span class="payment-type">{{ sale.payment }}</span>
+              <span class="staff-name">{{ sale.staff }}</span>
+              <span class="sale-date">{{ sale.date | date:'dd/MM/yyyy' }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="sale-actions">
+          <button 
+            class="action-btn info-btn"
+            title="Detay"
+          >
+            <i class="fas fa-info"></i>
+          </button>
+          <button 
+            class="action-btn edit-btn"
+            (click)="openSaleForm(sale)"
+            title="Düzenle"
+          >
+            <i class="fas fa-edit"></i>
+          </button>
+          <button 
+            class="action-btn delete-btn"
+            (click)="deleteSale(sale)"
+            title="Sil"
+          >
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="filteredSales.length === 0" class="empty-state">
+      <div class="empty-icon">
+        <i class="fas fa-shopping-bag"></i>
+      </div>
+      <h3>Henüz satış kaydı yok</h3>
+      <p>İlk satış kaydınızı ekleyerek başlayın</p>
+    </div>
+  </div>
+
+  <!-- Satış Ekle/Düzenle Modalı -->
+  <div class="modal-backdrop" *ngIf="showSaleForm">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-icon">
+          <i class="fas fa-plus-circle"></i>
+        </div>
+        <h3 class="modal-title">{{ editingSale ? 'Satışı Düzenle' : 'Yeni Satış Ekle' }}</h3>
+        <button class="modal-close" (click)="closeSaleForm()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <form (ngSubmit)="saveSale()" #saleForm="ngForm" class="sale-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-user"></i>
+              Müşteri Adı
+            </label>
+            <input 
+              type="text" 
+              [(ngModel)]="newSale.customer" 
+              name="customer" 
+              required 
+              class="form-input"
+              placeholder="Müşteri adını girin"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-phone"></i>
+              Müşteri Telefonu
+            </label>
+            <input 
+              type="text" 
+              [(ngModel)]="newSale.customerPhone" 
+              name="customerPhone" 
+              required 
+              class="form-input"
+              placeholder="Telefon numarası"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-box"></i>
+              Ürünler
+            </label>
+            <input 
+              type="text" 
+              [(ngModel)]="newSale.products" 
+              name="products" 
+              required 
+              class="form-input"
+              placeholder="Satılan ürünler"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-hashtag"></i>
+              Miktar
+            </label>
+            <input 
+              type="number" 
+              [(ngModel)]="newSale.quantity" 
+              name="quantity" 
+              min="1" 
+              required 
+              class="form-input"
+              placeholder="0"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-coins"></i>
+              Toplam Tutar
+            </label>
+            <input 
+              type="number" 
+              [(ngModel)]="newSale.total" 
+              name="total" 
+              min="1" 
+              required 
+              class="form-input"
+              placeholder="0"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-credit-card"></i>
+              Ödeme Türü
+            </label>
+            <select [(ngModel)]="newSale.payment" name="payment" required class="form-input">
+              <option value="">Seçiniz</option>
+              <option>Nakit</option>
+              <option>Kredi Kartı</option>
+              <option>Havale</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-user-tie"></i>
+              Personel
+            </label>
+            <input 
+              type="text" 
+              [(ngModel)]="newSale.staff" 
+              name="staff" 
+              required 
+              class="form-input"
+              placeholder="Personel adı"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-info-circle"></i>
+              Durum
+            </label>
+            <select [(ngModel)]="newSale.status" name="status" required class="form-input">
+              <option value="">Seçiniz</option>
+              <option>Tamamlandı</option>
+              <option>Bekliyor</option>
+              <option>İade</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-primary" [disabled]="saleForm.invalid">
+            <i class="fas" [class.fa-save]="editingSale" [class.fa-plus]="!editingSale"></i>
+            {{ editingSale ? 'Güncelle' : 'Ekle' }}
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="closeSaleForm()">
+            <i class="fas fa-times"></i>
+            İptal
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

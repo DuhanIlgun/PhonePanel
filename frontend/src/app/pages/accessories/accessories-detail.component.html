@@ -1,0 +1,30 @@
+<div class="accessories-detail-bg">
+  <div class="accessories-detail-header">
+    <h2><i class="fas fa-headphones"></i> Aksesuarlar Detay</h2>
+    <p>Son ayın aksesuar stok ve değer özetleri</p>
+  </div>
+  <div class="accessories-detail-cards">
+    <div class="summary-card total">
+      <div class="summary-label">Toplam Stok Değeri</div>
+      <div class="summary-value">₺{{ totalValue | number:'1.0-0' }}</div>
+    </div>
+    <div class="summary-card max">
+      <div class="summary-label">En Fazla Stok</div>
+      <div class="summary-value">{{ maxStock.name }}<br><span>{{ maxStock.stock }} adet</span></div>
+    </div>
+    <div class="summary-card min">
+      <div class="summary-label">En Az Stok</div>
+      <div class="summary-value">{{ minStock.name }}<br><span>{{ minStock.stock }} adet</span></div>
+    </div>
+  </div>
+  <div class="accessories-list-section">
+    <h3>Son Ayın Aksesuarları</h3>
+    <div class="accessories-list">
+      <div class="accessory-item" *ngFor="let acc of lastMonthAccessories">
+        <span class="accessory-name">{{ acc.name }}</span>
+        <span class="accessory-stock">{{ acc.stock }} adet</span>
+        <span class="accessory-value">₺{{ (acc.price * acc.stock) | number:'1.0-0' }}</span>
+      </div>
+    </div>
+  </div>
+</div> 

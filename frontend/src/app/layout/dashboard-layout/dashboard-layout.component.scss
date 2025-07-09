@@ -1,0 +1,308 @@
+// Modern CSS Variables
+:root {
+  --primary-color: #667eea;
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --secondary-color: #f093fb;
+  --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --success-color: #4facfe;
+  --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --warning-color: #43e97b;
+  --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  --danger-color: #fa709a;
+  --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  --dark-color: #2c3e50;
+  --light-color: #ecf0f1;
+  --white: #ffffff;
+  --gray-100: #f8f9fa;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+  --gray-400: #ced4da;
+  --gray-500: #adb5bd;
+  --gray-600: #6c757d;
+  --gray-700: #495057;
+  --gray-800: #343a40;
+  --gray-900: #212529;
+  --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+  --border-radius: 0.5rem;
+  --transition: all 0.3s ease;
+}
+
+// Global Styles
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--gray-100);
+  color: var(--gray-800);
+}
+
+// Layout Container
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--gray-100);
+}
+
+// Modern Navbar
+.navbar {
+  background: var(--primary-gradient);
+  color: var(--white);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow);
+  position: relative;
+  z-index: 1000;
+
+  .navbar-left {
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      
+      i {
+        font-size: 1.5rem;
+        color: var(--white);
+      }
+      
+      h1 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0;
+        background: linear-gradient(45deg, #fff, #f0f0f0);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+    }
+  }
+
+  .navbar-right {
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+
+        i {
+          color: var(--white);
+          font-size: 1rem;
+        }
+      }
+
+      .username {
+        font-weight: 500;
+        color: var(--white);
+      }
+
+      .logout-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: var(--white);
+        padding: 0.5rem 1rem;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: var(--transition);
+        backdrop-filter: blur(10px);
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.2);
+          transform: translateY(-1px);
+        }
+
+        i {
+          font-size: 0.875rem;
+        }
+      }
+    }
+  }
+}
+
+// Layout Content
+.layout-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+// Modern Sidebar
+.sidebar {
+  width: 280px;
+  background: var(--white);
+  box-shadow: var(--shadow);
+  position: relative;
+  z-index: 999;
+
+  .sidebar-nav {
+    padding: 1.5rem 0;
+
+    .nav-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      .nav-item {
+        margin: 0.25rem 1rem;
+
+        .nav-link {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 0.875rem 1rem;
+          color: var(--gray-600);
+          text-decoration: none;
+          border-radius: var(--border-radius);
+          transition: var(--transition);
+          position: relative;
+          overflow: hidden;
+
+          &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-gradient);
+            transition: var(--transition);
+            z-index: -1;
+          }
+
+          i {
+            font-size: 1.125rem;
+            width: 20px;
+            text-align: center;
+            transition: var(--transition);
+          }
+
+          span {
+            font-weight: 500;
+            transition: var(--transition);
+          }
+
+          &:hover {
+            color: var(--white);
+            transform: translateX(5px);
+
+            &::before {
+              left: 0;
+            }
+
+            i {
+              transform: scale(1.1);
+            }
+          }
+        }
+
+        &.active {
+          .nav-link {
+            background: var(--primary-gradient);
+            color: var(--white);
+            box-shadow: var(--shadow);
+            transform: translateX(5px);
+
+            i {
+              transform: scale(1.1);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Main Content
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  background: var(--gray-100);
+
+  // Scrollbar Styling
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--gray-200);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--primary-gradient);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-gradient);
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .sidebar {
+    width: 240px;
+  }
+
+  .navbar {
+    padding: 1rem;
+
+    .navbar-left .logo h1 {
+      font-size: 1.25rem;
+    }
+
+    .navbar-right .user-info {
+      gap: 0.5rem;
+
+      .username {
+        display: none;
+      }
+    }
+  }
+
+  .main-content {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .navbar {
+    .navbar-left .logo {
+      gap: 0.5rem;
+
+      i {
+        font-size: 1.25rem;
+      }
+
+      h1 {
+        font-size: 1rem;
+      }
+    }
+  }
+}
+  

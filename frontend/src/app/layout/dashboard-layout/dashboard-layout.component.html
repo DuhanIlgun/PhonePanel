@@ -1,0 +1,86 @@
+<div class="layout-container">
+    <!-- Modern Navbar -->
+    <header class="navbar">
+        <div class="navbar-left">
+            <div class="logo">
+                <i class="fas fa-mobile-alt"></i>
+                <h1>DiPanel</h1>
+            </div>
+        </div>
+        <div class="navbar-right">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <span class="username">{{ userEmail }}</span>
+                <button class="logout-btn" (click)="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Çıkış
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="layout-content">
+        <!-- Modern Sidebar -->
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <ul class="nav-list">
+                    <li class="nav-item" routerLinkActive="active">
+                        <a routerLink="/dashboard/home" class="nav-link">
+                            <i class="fas fa-home"></i>
+                            <span>Ana Sayfa</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" routerLinkActive="active">
+                        <a routerLink="/dashboard/sales" class="nav-link">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Satışlar</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" routerLinkActive="active">
+                        <a routerLink="/dashboard/expenses" class="nav-link">
+                            <i class="fas fa-receipt"></i>
+                            <span>Giderler</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" routerLinkActive="active">
+                        <a routerLink="/dashboard/income" class="nav-link">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>Gelirler</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" routerLinkActive="active">
+                        <a routerLink="/dashboard/accessories" class="nav-link">
+                            <i class="fas fa-headphones"></i>
+                            <span>Aksesuarlar</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" routerLinkActive="active">
+                        <a routerLink="/dashboard/inventory" class="nav-link">
+                            <i class="fas fa-boxes"></i>
+                            <span>Stoklar</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" routerLinkActive="active">
+                        <a routerLink="/dashboard/notes" class="nav-link">
+                            <i class="fas fa-sticky-note"></i>
+                            <span>Notlar</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" routerLinkActive="active">
+                        <a routerLink="/dashboard/settings" class="nav-link">
+                            <i class="fas fa-cog"></i>
+                            <span>Ayarlar</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <router-outlet></router-outlet>
+        </main>
+    </div>
+</div>

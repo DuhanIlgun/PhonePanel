@@ -1,0 +1,29 @@
+<div class="inventory-detail-bg">
+  <div class="inventory-detail-header">
+    <h2><i class="fas fa-boxes"></i> Stoklar Detay</h2>
+    <p>Stok özetleri ve analizleri</p>
+  </div>
+  <div class="inventory-detail-cards">
+    <div class="summary-card total">
+      <div class="summary-label">Toplam Stok</div>
+      <div class="summary-value">{{ total }} ürün</div>
+    </div>
+    <div class="summary-card max">
+      <div class="summary-label">En Fazla Stok</div>
+      <div class="summary-value">{{ maxStock.name }}<br><span>{{ maxStock.stock }} adet</span></div>
+    </div>
+    <div class="summary-card min">
+      <div class="summary-label">En Az Stok</div>
+      <div class="summary-value">{{ minStock.name }}<br><span>{{ minStock.stock }} adet</span></div>
+    </div>
+  </div>
+  <div class="inventory-list-section">
+    <h3>Stok Listesi</h3>
+    <div class="inventory-list">
+      <div class="inventory-item" *ngFor="let item of inventory">
+        <span class="inventory-name">{{ item.name }}</span>
+        <span class="inventory-stock">{{ item.stock }} adet</span>
+      </div>
+    </div>
+  </div>
+</div> 
